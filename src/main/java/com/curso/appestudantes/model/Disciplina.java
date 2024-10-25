@@ -6,6 +6,8 @@ public class Disciplina {
     private int departamentoId;
     private int cargaHoraria;
 
+    public Disciplina(){}
+
     public Disciplina(int disciplinaId, String nome, int departamentoId, int cargaHoraria) {
         this.disciplinaId = disciplinaId;
         this.nome = nome;
