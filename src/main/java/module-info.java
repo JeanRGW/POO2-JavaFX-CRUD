@@ -8,4 +8,6 @@ module com.curso.appestudantes {
 
     opens com.curso.appestudantes to javafx.fxml;
     exports com.curso.appestudantes;
+    exports com.curso.appestudantes.controller;
+    opens com.curso.appestudantes.controller to javafx.fxml;
 }

@@ -1,7 +1,6 @@
 package com.curso.appestudantes.dao;
 
 import com.curso.appestudantes.model.Departamento;
-import com.curso.appestudantes.model.Disciplina;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
