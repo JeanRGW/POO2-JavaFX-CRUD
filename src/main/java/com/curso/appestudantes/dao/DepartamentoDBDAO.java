@@ -64,10 +64,22 @@ public class DepartamentoDBDAO implements DepartamentoDAO {
         close();
     }
 
+    public void removePorId(int x) throws SQLException {
+        open();
+
+        sql = "DELETE FROM Departamento WHERE departamentoId=?;";
+        stmt = conn.prepareStatement(sql);
+
+        stmt.setInt(1, x);
+
+        stmt.executeUpdate();
+        close();
+    }
+
     public Departamento buscaPorId(int x) throws SQLException {
         open();
 
-        sql = "SELECT FROM Departamento WHERE departamentoId=?;";
+        sql = "SELECT * FROM Departamento WHERE departamentoId=?;";
         stmt = conn.prepareStatement(sql);
 
         stmt.setInt(1, x);
@@ -91,7 +103,7 @@ public class DepartamentoDBDAO implements DepartamentoDAO {
     public List<Departamento> listaTodos() throws SQLException {
         open();
 
-        sql = "SELECT FROM Departamento;";
+        sql = "SELECT * FROM Departamento;";
         stmt = conn.prepareStatement(sql);
         result = stmt.executeQuery();
 

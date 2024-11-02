@@ -1,6 +1,7 @@
 package com.curso.appestudantes.controller;
 
 import com.curso.appestudantes.dao.EstudanteDBDAO;
+import com.curso.appestudantes.model.Departamento;
 import com.curso.appestudantes.model.Estudante;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,6 +39,9 @@ public class EstudanteController {
     private TextField estudanteIdField;
 
     @FXML
+    private Button excluirButton;
+
+    @FXML
     private MenuItem goToDepartamento;
 
     @FXML
@@ -47,9 +51,6 @@ public class EstudanteController {
     private MenuItem goToEstudante;
 
     @FXML
-    private Button newButton;
-
-    @FXML
     private TextField nomeField;
 
     @FXML
@@ -57,6 +58,39 @@ public class EstudanteController {
 
     @FXML
     private TableView<Estudante> tabelaEstudantes;
+
+    @FXML
+    void excluirButtonOnAction(ActionEvent event) {
+        try {
+            int estudanteId = Integer.parseInt(estudanteIdField.getText());
+
+            Estudante existente = estudanteDBDAO.buscaPorId(estudanteId);
+
+            if (existente != null) {
+                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Confirmar Remoção");
+                confirmAlert.setContentText("Deseja remover este estudante?");
+
+                if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+                    // Atualiza o registro no banco de dados
+                    estudanteDBDAO.removePorId(estudanteId);
+                    showAlert("Remoção realizada", "O estudante foi excluido com sucesso.");
+                }
+            }
+            else {
+                showAlert("Erro", "Não existe um estudante cadastrado com esse ID.");
+            }
+
+            atualizarTabelaEstudantes();
+
+        } catch (NumberFormatException e) {
+            showAlert("Erro de entrada", "O ID do estudante deve ser um número.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            showAlert("Erro no banco de dados", "Não foi possível remover o estudante.");
+        }
+
+    }
 
     @FXML
     void saveButtonOnAction(ActionEvent event) {

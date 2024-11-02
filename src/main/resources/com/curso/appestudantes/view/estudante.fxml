@@ -40,7 +40,6 @@
                               <TableColumn fx:id="colNome" prefWidth="150.0" text="Nome" />
                           </columns>
                       </TableView>
-                  <Button fx:id="newButton" layoutX="173.0" layoutY="359.0" mnemonicParsing="false" text="Novo" />
                   </children>
               </AnchorPane>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="358.0">
@@ -49,12 +48,13 @@
                       <TextField fx:id="nomeField" layoutX="27.0" layoutY="166.0" promptText="nome" />
                       <TextField fx:id="cpfField" layoutX="27.0" layoutY="206.0" promptText="CPF" />
                       <TextField fx:id="dataNascField" layoutX="27.0" layoutY="246.0" promptText="Date of Birth" />
-                  <Button fx:id="saveButton" layoutX="153.0" layoutY="359.0" mnemonicParsing="false" onAction="#saveButtonOnAction" text="Salvar" />
+                      <Button fx:id="saveButton" layoutX="119.0" layoutY="359.0" mnemonicParsing="false" onAction="#saveButtonOnAction" text="Salvar" />
                   <Label layoutX="22.0" layoutY="42.0" text="Editar ou Adicionar um Estudante" textAlignment="CENTER">
                      <font>
-                        <Font size="21.0" />
+                        <Font size="18.0" />
                      </font>
                   </Label>
+                      <Button fx:id="excluirButton" layoutX="185.0" layoutY="359.0" mnemonicParsing="false" onAction="#excluirButtonOnAction" text="Excluir" />
                   </children>
               </AnchorPane>
           </items>

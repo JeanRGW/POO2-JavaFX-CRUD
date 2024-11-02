@@ -11,6 +11,11 @@ public class InitDB {
                 "   dataNascimento DATE," +
                 "   nome VARCHAR(80) NOT NULL," +
                 "   cpf VARCHAR(11)" +
+                ");" +
+                "CREATE TABLE departamento (" +
+                "   departamentoId INT PRIMARY KEY," +
+                "   nome VARCHAR(80) NOT NULL," +
+                "   qntProfessores INT" +
                 ");";
 
         try {

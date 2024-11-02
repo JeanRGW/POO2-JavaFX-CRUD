@@ -52,6 +52,18 @@ public class EstudanteDBDAO implements EstudanteDAO {
         close();
     }
 
+    public void removePorId(int x) throws SQLException {
+        open();
+
+        sql = "DELETE FROM Estudante WHERE estudanteId=?;";
+        stmt = conn.prepareStatement(sql);
+
+        stmt.setInt(1, x);
+
+        stmt.executeUpdate();
+        close();
+    }
+
     public Estudante buscaPorId(int estudanteId) throws SQLException {
         open();
         sql = "SELECT * FROM Estudante WHERE estudanteId=?;";

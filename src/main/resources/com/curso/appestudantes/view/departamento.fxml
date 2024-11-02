@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -10,8 +11,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.curso.appestudantes.controller.DepartamentoController">
+<VBox prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.curso.appestudantes.controller.DepartamentoController">
    <children>
       <AnchorPane prefHeight="32.0" prefWidth="600.0">
          <children>
@@ -32,22 +34,26 @@
           <items>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="242.0">
                   <children>
-                      <TableView fx:id="tabelaEstudantes" layoutX="18.0" layoutY="14.0" prefHeight="340.0" prefWidth="200.0">
+                      <TableView fx:id="tabelaDepartamentos" layoutX="18.0" layoutY="14.0" prefHeight="340.0" prefWidth="200.0">
                           <columns>
                               <TableColumn fx:id="colId" prefWidth="50.0" text="Id" />
                               <TableColumn fx:id="colNome" prefWidth="150.0" text="Nome" />
                           </columns>
                       </TableView>
-                  <Button fx:id="newButton" layoutX="173.0" layoutY="359.0" mnemonicParsing="false" text="Novo" />
                   </children>
               </AnchorPane>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="358.0">
                   <children>
-                      <TextField fx:id="estudanteIdField" editable="false" layoutX="27.0" layoutY="126.0" promptText="estudanteId" />
-                      <TextField fx:id="nomeField" editable="false" layoutX="27.0" layoutY="166.0" promptText="nome" />
-                      <TextField fx:id="cpfField" editable="false" layoutX="27.0" layoutY="206.0" promptText="CPF" />
-                      <TextField fx:id="dataNascField" editable="false" layoutX="27.0" layoutY="246.0" promptText="Date of Birth" />
-                  <Button fx:id="saveButton" layoutX="153.0" layoutY="359.0" mnemonicParsing="false" text="Salvar" />
+                      <TextField fx:id="departamentoIdField" layoutX="27.0" layoutY="126.0" promptText="departamentoId" />
+                      <TextField fx:id="nomeField" layoutX="27.0" layoutY="166.0" promptText="nome" />
+                      <TextField fx:id="qntProfessoresField" layoutX="27.0" layoutY="206.0" promptText="quantidadeProfessores" />
+                  <Button fx:id="saveButton" layoutX="119.0" layoutY="359.0" mnemonicParsing="false" onAction="#saveButtonOnAction" text="Salvar" />
+                      <Label layoutX="22.0" layoutY="42.0" text="Editar ou Adicionar um Departamento" textAlignment="CENTER">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                      </Label>
+                  <Button fx:id="excluirButton" layoutX="185.0" layoutY="359.0" mnemonicParsing="false" onAction="#excluirButtonOnAction" text="Excluir" />
                   </children>
               </AnchorPane>
           </items>
