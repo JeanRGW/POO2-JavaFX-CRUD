@@ -10,13 +10,12 @@ public class InitDB {
                 "   estudanteId INT PRIMARY KEY," +
                 "   dataNascimento DATE," +
                 "   nome VARCHAR(80) NOT NULL," +
-                "   cpf INT" +
+                "   cpf VARCHAR(11)" +
                 ");";
 
         try {
             Connection conn = Conexao.getConexao();
             Statement stmt = conn.createStatement();
-
             stmt.executeUpdate(sqlTable);
 
             System.out.println("Banco de dados inicializado.");
