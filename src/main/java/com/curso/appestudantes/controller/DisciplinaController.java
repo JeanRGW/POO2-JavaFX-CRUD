@@ -73,7 +73,7 @@ public class DisciplinaController {
         try {
             // Attempt to load the new scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/curso/appestudantes/view/" + viewFile));
-            Scene newScene = new Scene(loader.load(), 600, 400);
+            Scene newScene = new Scene(loader.load(), 600, 437);
 
             // Obtain the current stage
             Stage stage = (Stage) saveButton.getScene().getWindow();

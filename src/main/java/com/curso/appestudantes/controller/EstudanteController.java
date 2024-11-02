@@ -19,32 +19,13 @@ import java.util.List;
 public class EstudanteController {
     EstudanteDBDAO estudanteDBDAO;
     List<Estudante> estudantes;
-
-
-    @FXML
-    public void initialize() {
-        estudanteDBDAO = new EstudanteDBDAO();
-        try {
-            estudantes = estudanteDBDAO.listaTodos();
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Erro no banco de dados.");
-            alert.setContentText("Não foi possível recuperar os dados do banco.");
-
-            alert.showAndWait();
-        }
-
-
-        // Carregar dados na tabela
-    }
+    private ObservableList<Estudante> observableEstudantes;
 
     @FXML
-    private TableColumn<?, ?> colId;
+    private TableColumn<Estudante, Integer> colId;
 
     @FXML
-    private TableColumn<?, ?> colNome;
+    private TableColumn<Estudante, String> colNome;
 
     @FXML
     private TextField cpfField;
@@ -77,6 +58,38 @@ public class EstudanteController {
     private TableView<Estudante> tabelaEstudantes;
 
     @FXML
+    public void initialize() {
+        estudanteDBDAO = new EstudanteDBDAO();
+
+        // Setting up columns
+        colId.setCellValueFactory(new PropertyValueFactory<>("estudanteId")); // Ensure the property name matches
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));       // Ensure the property name matches
+
+        // Load data from the database
+        try {
+            estudantes = estudanteDBDAO.listaTodos();
+
+            System.out.println(estudantes);
+
+            // Use ObservableList directly from Estudante
+            observableEstudantes = FXCollections.observableArrayList(estudantes);
+            tabelaEstudantes.setItems(observableEstudantes);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Erro no banco de dados.");
+            alert.setContentText("Não foi possível recuperar os dados do banco.");
+            alert.showAndWait();
+        }
+
+        tabelaEstudantes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            // Logica item selecionado
+        });
+
+    }
+
+    @FXML
     void handleGoToDepartamento(ActionEvent event) {
         swapStage("departamento.fxml");
     }
@@ -91,31 +104,22 @@ public class EstudanteController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Onde você quer chegar?");
         alert.setContentText("Você já está aqui");
-
         alert.showAndWait();
     }
 
     void swapStage(String viewFile) {
         try {
-            // Attempt to load the new scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/curso/appestudantes/view/" + viewFile));
-            Scene newScene = new Scene(loader.load(), 600, 400);
-
-            // Obtain the current stage
+            Scene newScene = new Scene(loader.load(), 600, 437);
             Stage stage = (Stage) saveButton.getScene().getWindow();
-
-            // Set the new scene and show the stage
             stage.setScene(newScene);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Erro ao trocar cena");
             alert.setContentText("Não foi possível trocar a cena.");
-
             alert.showAndWait();
         }
     }
-
 }
