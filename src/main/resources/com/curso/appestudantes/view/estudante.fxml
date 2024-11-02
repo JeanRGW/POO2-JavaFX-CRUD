@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -47,7 +48,6 @@
                       <TextField fx:id="estudanteIdField" layoutX="27.0" layoutY="126.0" promptText="estudanteId" />
                       <TextField fx:id="nomeField" layoutX="27.0" layoutY="166.0" promptText="nome" />
                       <TextField fx:id="cpfField" layoutX="27.0" layoutY="206.0" promptText="CPF" />
-                      <TextField fx:id="dataNascField" layoutX="27.0" layoutY="246.0" promptText="Date of Birth" />
                       <Button fx:id="saveButton" layoutX="119.0" layoutY="359.0" mnemonicParsing="false" onAction="#saveButtonOnAction" text="Salvar" />
                   <Label layoutX="22.0" layoutY="42.0" text="Editar ou Adicionar um Estudante" textAlignment="CENTER">
                      <font>
@@ -55,6 +55,7 @@
                      </font>
                   </Label>
                       <Button fx:id="excluirButton" layoutX="185.0" layoutY="359.0" mnemonicParsing="false" onAction="#excluirButtonOnAction" text="Excluir" />
+                  <DatePicker fx:id="dataNascField" layoutX="27.0" layoutY="246.0" prefHeight="25.0" prefWidth="149.0" promptText="data de nascimento" />
                   </children>
               </AnchorPane>
           </items>

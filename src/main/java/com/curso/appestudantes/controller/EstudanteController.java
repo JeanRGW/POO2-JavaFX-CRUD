@@ -16,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public class EstudanteController {
@@ -33,7 +34,8 @@ public class EstudanteController {
     private TextField cpfField;
 
     @FXML
-    private TextField dataNascField;
+    private DatePicker dataNascField;
+
 
     @FXML
     private TextField estudanteIdField;
@@ -84,7 +86,7 @@ public class EstudanteController {
             atualizarTabelaEstudantes();
 
         } catch (NumberFormatException e) {
-            showAlert("Erro de entrada", "O ID do estudante deve ser um número.");
+            showAlert("Erro de entrada", "Algum campo está errado.");
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erro no banco de dados", "Não foi possível remover o estudante.");
@@ -98,7 +100,7 @@ public class EstudanteController {
             int estudanteId = Integer.parseInt(estudanteIdField.getText());
             String nome = nomeField.getText();
             String cpf = cpfField.getText();
-            Date dataNasc = Date.valueOf(dataNascField.getText());
+            Date dataNasc = Date.valueOf(dataNascField.getValue());
 
             Estudante estudante = new Estudante(estudanteId, dataNasc, cpf, nome);
 
@@ -128,7 +130,7 @@ public class EstudanteController {
             atualizarTabelaEstudantes();
 
         } catch (NumberFormatException e) {
-            showAlert("Erro de entrada", "O ID do estudante deve ser um número.");
+            showAlert("Erro de entrada", "Algum campo está errado.");
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erro no banco de dados", "Não foi possível salvar os dados do estudante.");
@@ -185,7 +187,7 @@ public class EstudanteController {
                 estudanteIdField.setText(String.valueOf(newSelection.getEstudanteId()));
                 nomeField.setText(newSelection.getNome());
                 cpfField.setText(newSelection.getCpf());
-                dataNascField.setText(newSelection.getDataNascimento().toString());
+                dataNascField.setValue(LocalDate.parse(newSelection.getDataNascimento().toString()));
             }
         });
 

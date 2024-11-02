@@ -55,6 +55,18 @@ public class DisciplinaDBDAO implements DisciplinaDAO {
         close();
     }
 
+    public void removePorId(int x) throws SQLException {
+        open();
+
+        sql = "DELETE FROM Disciplina WHERE disciplinaId=?;";
+        stmt = conn.prepareStatement(sql);
+
+        stmt.setInt(1, x);
+
+        stmt.executeUpdate();
+        close();
+    }
+
     public Disciplina buscaPorId(int disciplinaId) throws SQLException {
         open();
         sql = "SELECT * FROM Disciplina WHERE disciplinaId=?;";

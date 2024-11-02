@@ -16,6 +16,12 @@ public class InitDB {
                 "   departamentoId INT PRIMARY KEY," +
                 "   nome VARCHAR(80) NOT NULL," +
                 "   qntProfessores INT" +
+                ");" +
+                "CREATE TABLE disciplina (" +
+                "   disciplinaId INT PRIMARY KEY," +
+                "   nome VARCHAR(80) NOT NULL," +
+                "   cargaHoraria INT," +
+                "   departamentoId INT REFERENCES departamento (departamentoId)" +
                 ");";
 
         try {

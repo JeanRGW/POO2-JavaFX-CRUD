@@ -81,7 +81,7 @@ public class DepartamentoController {
             atualizarTabelaDepartamentos();
 
         } catch (NumberFormatException e) {
-            showAlert("Erro de entrada", "O ID do departamento deve ser um número.");
+            showAlert("Erro de entrada", "Algum campo está errado.");
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erro no banco de dados", "Não foi possível remover o departamento.");
@@ -124,7 +124,7 @@ public class DepartamentoController {
             atualizarTabelaDepartamentos();
 
         } catch (NumberFormatException e) {
-            showAlert("Erro de entrada", "O ID do departamento deve ser um número.");
+            showAlert("Erro de entrada", "Algum campo está errado.");
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erro no banco de dados", "Não foi possível salvar os dados do departamento.");
