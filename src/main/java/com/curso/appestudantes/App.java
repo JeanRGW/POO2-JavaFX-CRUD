@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class App extends Application {
     public static Stage stage;
@@ -23,8 +24,13 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        InitDB.init();
+        try {
+            InitDB.init();
 
-        launch();
+            launch();
+        } catch (SQLException e) {
+            System.out.println("Erro grave no banco de dados, verificar login e existência do banco");
+        }
+
     }
 }

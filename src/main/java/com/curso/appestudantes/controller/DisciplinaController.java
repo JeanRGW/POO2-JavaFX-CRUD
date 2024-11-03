@@ -2,6 +2,7 @@ package com.curso.appestudantes.controller;
 
 import com.curso.appestudantes.dao.DepartamentoDBDAO;
 import com.curso.appestudantes.dao.DisciplinaDBDAO;
+import com.curso.appestudantes.exceptions.InvalidInputException;
 import com.curso.appestudantes.model.Departamento;
 import com.curso.appestudantes.model.Disciplina;
 import javafx.collections.FXCollections;
@@ -98,6 +99,9 @@ public class DisciplinaController extends Controller {
         try {
             int disciplinaId = Integer.parseInt(disciplinaIdField.getText());
             String nome = nomeField.getText();
+            if(nome == null || nome.equals("")){
+                throw new InvalidInputException("Por favor forneça um nome.");
+            }
             int cargaHoraria = Integer.parseInt(cargaHorariaField.getText());
             int departamentoId = departamentoSelector.getSelectionModel().getSelectedItem().getDepartamentoId();
 
@@ -133,6 +137,8 @@ public class DisciplinaController extends Controller {
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erro no banco de dados", "Não foi possível salvar os dados da disciplina.");
+        } catch (InvalidInputException e) {
+            showAlert("Entrada inválida", e.getMessage());
         }
     }
 

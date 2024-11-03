@@ -3,37 +3,52 @@ package com.curso.appestudantes.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 
 public class InitDB {
-    public static void init() {
-        String sqlTable = "CREATE TABLE estudante (" +
-                "   estudanteId INT PRIMARY KEY," +
-                "   dataNascimento DATE," +
-                "   nome VARCHAR(80) NOT NULL," +
-                "   cpf VARCHAR(11)" +
-                ");" +
-                "CREATE TABLE departamento (" +
-                "   departamentoId INT PRIMARY KEY," +
-                "   nome VARCHAR(80) NOT NULL," +
-                "   qntProfessores INT" +
-                ");" +
-                "CREATE TABLE disciplina (" +
-                "   disciplinaId INT PRIMARY KEY," +
-                "   nome VARCHAR(80) NOT NULL," +
-                "   cargaHoraria INT," +
-                "   departamentoId INT REFERENCES departamento (departamentoId)" +
-                ");";
+    private static final List<String> criacaoTabelas = Arrays.asList(
+            "CREATE TABLE IF NOT EXISTS estudante (" +
+                    "   estudanteId INT PRIMARY KEY," +
+                    "   dataNascimento DATE," +
+                    "   nome VARCHAR(80) NOT NULL," +
+                    "   cpf VARCHAR(11)" +
+                    ");",
 
-        try {
-            Connection conn = Conexao.getConexao();
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(sqlTable);
+            "CREATE TABLE IF NOT EXISTS departamento (" +
+                    "   departamentoId INT PRIMARY KEY," +
+                    "   nome VARCHAR(80) NOT NULL," +
+                    "   qntProfessores INT" +
+                    ");",
 
-            System.out.println("Banco de dados inicializado.");
+            "CREATE TABLE IF NOT EXISTS disciplina (" +
+                    "   disciplinaId INT PRIMARY KEY," +
+                    "   nome VARCHAR(80) NOT NULL," +
+                    "   cargaHoraria INT," +
+                    "   departamentoId INT REFERENCES departamento(departamentoId) ON DELETE CASCADE" +
+                    ");",
 
-        } catch (SQLException e) {
-            System.err.println("Erro ao inicializar banco de dados: " + e.getMessage());
-            e.printStackTrace();
+            "CREATE TABLE IF NOT EXISTS estudanteDisciplina (" +
+                    "estudanteId INT REFERENCES estudante(estudanteId) ON DELETE CASCADE," +
+                    "disciplinaId INT REFERENCES disciplina(disciplinaId) ON DELETE CASCADE," +
+                    "estado VARCHAR(30)," +
+                    "PRIMARY KEY (estudanteId, disciplinaId)" +
+                    ");"
+    );
+
+    public static void init() throws SQLException {
+        Connection conn = Conexao.getConexao();
+        Statement stmt = conn.createStatement();
+
+        for(String tabela: criacaoTabelas){
+            try {
+                stmt.executeUpdate(tabela);
+            } catch (SQLException e) {
+                System.out.println("Erro na execução de: " + tabela);
+                e.printStackTrace();
+            }
         }
+
+        System.out.println("Banco de dados inicializado.");
     }
 }
