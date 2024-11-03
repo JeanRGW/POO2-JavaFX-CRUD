@@ -14,7 +14,8 @@ public class Controller {
         try {
             // Carrega cena do arquivo.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/curso/appestudantes/view/" + viewFile));
-            Scene newScene = new Scene(loader.load(), 600, 437);
+            Scene newScene = new Scene(loader.load(), 600, 430);
+            newScene.getStylesheets().add(getClass().getResource("/com/curso/appestudantes/view/styles.css").toExternalForm());
 
             // Atribui a cena apra a janela.
             App.stage.setScene(newScene);

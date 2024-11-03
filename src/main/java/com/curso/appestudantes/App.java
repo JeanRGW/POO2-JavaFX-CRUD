@@ -16,7 +16,8 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/estudante.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 600, 437);
+        Scene scene = new Scene(fxmlLoader.load(), 600, 430);
+        scene.getStylesheets().add(getClass().getResource("/com/curso/appestudantes/view/styles.css").toExternalForm());
         stage.setTitle("App Estudantes");
         stage.setScene(scene);
         stage.show();

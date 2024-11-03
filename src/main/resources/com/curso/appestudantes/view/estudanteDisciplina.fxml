@@ -11,7 +11,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <SplitPane dividerPositions="0.4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.curso.appestudantes.controller.EstudanteDisciplinaController">
    <items>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="242.0">
@@ -45,8 +44,8 @@
                </items>
             </ChoiceBox>
             <Label fx:id="nomeEstudanteLabel" layoutX="42.0" layoutY="41.0" text="Nome do Estudante" />
-            <Label layoutX="29.0" layoutY="160.0" text="Disciplina" />
-            <Label layoutX="29.0" layoutY="212.0" text="Estado" />
+            <Label layoutX="29.0" layoutY="158.0" text="Disciplina" />
+            <Label layoutX="29.0" layoutY="210.0" text="Estado" />
          </children>
       </AnchorPane>
    </items>

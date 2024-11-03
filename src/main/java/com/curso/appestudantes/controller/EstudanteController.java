@@ -73,6 +73,7 @@ public class EstudanteController extends Controller {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/estudanteDisciplina.fxml"));
                 Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+                scene.getStylesheets().add(getClass().getResource("/com/curso/appestudantes/view/styles.css").toExternalForm());
 
                 Stage janelaPopUp = new Stage();
 
