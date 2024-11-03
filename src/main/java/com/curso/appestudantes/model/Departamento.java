@@ -36,4 +36,9 @@ public class Departamento {
     public void setQntProfessores(int qntProfessores) {
         this.qntProfessores = qntProfessores;
     }
+
+    @Override
+    public String toString(){
+        return nome;
+    }
 }

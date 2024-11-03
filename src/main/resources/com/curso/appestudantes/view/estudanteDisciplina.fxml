@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<SplitPane dividerPositions="0.4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.curso.appestudantes.controller.EstudanteDisciplinaController">
+   <items>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="242.0">
+         <children>
+            <TableView fx:id="tabelaDisciplinas" layoutX="18.0" layoutY="29.0" prefHeight="340.0" prefWidth="200.0">
+               <columns>
+                  <TableColumn fx:id="colDisciplinaNome" prefWidth="110.0" text="Disciplina" />
+                  <TableColumn fx:id="colEstado" prefWidth="90.0" text="Estado" />
+               </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="358.0">
+         <children>
+            <Button fx:id="saveButton" layoutX="119.0" layoutY="359.0" mnemonicParsing="false" onAction="#saveButtonOnAction" text="Salvar" />
+            <Label layoutX="42.0" layoutY="14.0" text="Editando Disciplinas do Estudante" textAlignment="CENTER">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="excluirButton" layoutX="185.0" layoutY="359.0" mnemonicParsing="false" onAction="#excluirButtonOnAction" text="Excluir" />
+            <ChoiceBox fx:id="disciplinaSelector" layoutX="29.0" layoutY="175.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="estadoSelector" layoutX="29.0" layoutY="226.0" prefWidth="150.0">
+               <items>
+                  <FXCollections fx:factory="observableArrayList">
+                     <String fx:value="Cursando" />
+                     <String fx:value="Aprovado" />
+                     <String fx:value="Interrompido" />
+                     <String fx:value="Não iniciado" />
+                  </FXCollections>
+               </items>
+            </ChoiceBox>
+            <Label fx:id="nomeEstudanteLabel" layoutX="42.0" layoutY="41.0" text="Nome do Estudante" />
+            <Label layoutX="29.0" layoutY="160.0" text="Disciplina" />
+            <Label layoutX="29.0" layoutY="212.0" text="Estado" />
+         </children>
+      </AnchorPane>
+   </items>
+</SplitPane>

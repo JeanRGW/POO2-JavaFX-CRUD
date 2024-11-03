@@ -23,8 +23,8 @@ public class EstudanteDisciplinaDBDAO implements EstudanteDisciplinaDAO {
         open();
         sql = "INSERT INTO EstudanteDisciplina (estudanteId, disciplinaId, estado) VALUES (?, ?, ?);";
         stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, ed.getEstudanteId());
-        stmt.setInt(2, ed.getDisciplinaId());
+        stmt.setInt(1, ed.getEstudante().getEstudanteId());
+        stmt.setInt(2, ed.getDisciplina().getDisciplinaId());
         stmt.setString(3, ed.getEstado());
         stmt.executeUpdate();
         close();
@@ -35,8 +35,8 @@ public class EstudanteDisciplinaDBDAO implements EstudanteDisciplinaDAO {
         sql = "UPDATE EstudanteDisciplina SET estado=? WHERE estudanteId=? AND disciplinaId=?;";
         stmt = conn.prepareStatement(sql);
         stmt.setString(1, ed.getEstado());
-        stmt.setInt(2, ed.getEstudanteId());
-        stmt.setInt(3, ed.getDisciplinaId());
+        stmt.setInt(2, ed.getEstudante().getEstudanteId());
+        stmt.setInt(3, ed.getDisciplina().getDisciplinaId());
         stmt.executeUpdate();
         close();
     }
@@ -45,8 +45,8 @@ public class EstudanteDisciplinaDBDAO implements EstudanteDisciplinaDAO {
         open();
         sql = "DELETE FROM EstudanteDisciplina WHERE estudanteId=? AND disciplinaId=?;";
         stmt = conn.prepareStatement(sql);
-        stmt.setInt(1, ed.getEstudanteId());
-        stmt.setInt(2, ed.getDisciplinaId());
+        stmt.setInt(1, ed.getEstudante().getEstudanteId());
+        stmt.setInt(2, ed.getDisciplina().getDisciplinaId());
         stmt.executeUpdate();
         close();
     }
@@ -60,9 +60,12 @@ public class EstudanteDisciplinaDBDAO implements EstudanteDisciplinaDAO {
         result = stmt.executeQuery();
 
         if (result.next()) {
+            EstudanteDBDAO estudanteDBDAO = new EstudanteDBDAO();
+            DisciplinaDBDAO disciplinaDBDAO = new DisciplinaDBDAO();
+
             EstudanteDisciplina estudanteDisciplina = new EstudanteDisciplina(
-                    result.getInt("estudanteId"),
-                    result.getInt("disciplinaId"),
+                    estudanteDBDAO.buscaPorId(result.getInt("estudanteId")),
+                    disciplinaDBDAO.buscaPorId(result.getInt("disciplinaId")),
                     result.getString("estado")
             );
             close();
@@ -80,9 +83,35 @@ public class EstudanteDisciplinaDBDAO implements EstudanteDisciplinaDAO {
         result = stmt.executeQuery();
         List<EstudanteDisciplina> estudanteDisciplinas = new ArrayList<>();
         while (result.next()) {
+            EstudanteDBDAO estudanteDBDAO = new EstudanteDBDAO();
+            DisciplinaDBDAO disciplinaDBDAO = new DisciplinaDBDAO();
+
             EstudanteDisciplina estudanteDisciplina = new EstudanteDisciplina(
-                    result.getInt("estudanteId"),
-                    result.getInt("disciplinaId"),
+                    estudanteDBDAO.buscaPorId(result.getInt("estudanteId")),
+                    disciplinaDBDAO.buscaPorId(result.getInt("disciplinaId")),
+                    result.getString("estado")
+            );
+            estudanteDisciplinas.add(estudanteDisciplina);
+        }
+        close();
+        return estudanteDisciplinas;
+    }
+
+    public List<EstudanteDisciplina> listaPorEstudanteId(int estudanteId) throws SQLException {
+        open();
+        sql = "SELECT * FROM EstudanteDisciplina WHERE estudanteId=?;";
+        stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, estudanteId);
+
+        result = stmt.executeQuery();
+        List<EstudanteDisciplina> estudanteDisciplinas = new ArrayList<>();
+        while (result.next()) {
+            EstudanteDBDAO estudanteDBDAO = new EstudanteDBDAO();
+            DisciplinaDBDAO disciplinaDBDAO = new DisciplinaDBDAO();
+
+            EstudanteDisciplina estudanteDisciplina = new EstudanteDisciplina(
+                    estudanteDBDAO.buscaPorId(result.getInt("estudanteId")),
+                    disciplinaDBDAO.buscaPorId(result.getInt("disciplinaId")),
                     result.getString("estado")
             );
             estudanteDisciplinas.add(estudanteDisciplina);

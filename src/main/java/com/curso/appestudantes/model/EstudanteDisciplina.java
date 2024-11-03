@@ -1,30 +1,30 @@
 package com.curso.appestudantes.model;
 
 public class EstudanteDisciplina {
-    private int estudanteId;
-    private int disciplinaId;
+    private Estudante estudante;
+    private Disciplina disciplina;
     private String estado;
 
-    public EstudanteDisciplina(int estudanteId, int disciplinaId, String estado) {
-        this.estudanteId = estudanteId;
-        this.disciplinaId = disciplinaId;
+    public EstudanteDisciplina(Estudante estudante, Disciplina disciplina, String estado) {
+        this.estudante = estudante;
+        this.disciplina = disciplina;
         this.estado = estado;
     }
 
-    public int getEstudanteId() {
-        return estudanteId;
+    public Estudante getEstudante() {
+        return estudante;
     }
 
-    public void setEstudanteId(int estudanteId) {
-        this.estudanteId = estudanteId;
+    public void setEstudante(Estudante estudante) {
+        this.estudante = estudante;
     }
 
-    public int getDisciplinaId() {
-        return disciplinaId;
+    public Disciplina getDisciplina() {
+        return disciplina;
     }
 
-    public void setDisciplinaId(int disciplinaId) {
-        this.disciplinaId = disciplinaId;
+    public void setDisciplina(Disciplina disciplina) {
+        this.disciplina = disciplina;
     }
 
     public String getEstado() {

@@ -1,7 +1,8 @@
 package com.curso.appestudantes.controller;
 
+import com.curso.appestudantes.App;
 import com.curso.appestudantes.dao.EstudanteDBDAO;
-import com.curso.appestudantes.model.Departamento;
+import com.curso.appestudantes.exceptions.InvalidInputException;
 import com.curso.appestudantes.model.Estudante;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
 
@@ -19,9 +21,9 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
-public class EstudanteController {
-    EstudanteDBDAO estudanteDBDAO;
-    List<Estudante> estudantes;
+public class EstudanteController extends Controller {
+    private EstudanteDBDAO estudanteDBDAO;
+    private List<Estudante> estudantes;
     private ObservableList<Estudante> observableEstudantes;
 
     @FXML
@@ -36,9 +38,11 @@ public class EstudanteController {
     @FXML
     private DatePicker dataNascField;
 
-
     @FXML
     private TextField estudanteIdField;
+
+    @FXML
+    private Button editarDisciplinasButton;
 
     @FXML
     private Button excluirButton;
@@ -62,6 +66,37 @@ public class EstudanteController {
     private TableView<Estudante> tabelaEstudantes;
 
     @FXML
+    void editarDisciplinasButtonOnAction(ActionEvent event) {
+        Estudante estudante = tabelaEstudantes.getSelectionModel().getSelectedItem();
+
+        if(estudante != null){
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/estudanteDisciplina.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+
+                Stage janelaPopUp = new Stage();
+
+                // Travar tela inicial enquanto a outra estiver aberta
+                janelaPopUp.initOwner(App.stage);
+                janelaPopUp.initModality(Modality.APPLICATION_MODAL);
+
+                // Carregar estudante para a tela
+                janelaPopUp.setTitle("Disciplinas de " + estudante.getNome());
+                EstudanteDisciplinaController controller = fxmlLoader.getController();
+                controller.setEstudante(estudante);
+
+                janelaPopUp.setScene(scene);
+                janelaPopUp.setResizable(false);
+                janelaPopUp.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    @FXML
     void excluirButtonOnAction(ActionEvent event) {
         try {
             int estudanteId = Integer.parseInt(estudanteIdField.getText());
@@ -78,8 +113,7 @@ public class EstudanteController {
                     estudanteDBDAO.removePorId(estudanteId);
                     showAlert("Remoção realizada", "O estudante foi excluido com sucesso.");
                 }
-            }
-            else {
+            } else {
                 showAlert("Erro", "Não existe um estudante cadastrado com esse ID.");
             }
 
@@ -94,13 +128,50 @@ public class EstudanteController {
 
     }
 
+    // Validação de CPF, em caso de erro lança excessão com motivo.
+    void validarCpf(String cpf) throws InvalidInputException {
+
+        // Valida qnt de dígitos
+        if(cpf.length() != 11)
+            throw new InvalidInputException("Número de caracteres inválidos.");
+
+        // Calcula os dígitos verificadores
+        int d1 = calcularDigitoVerificador(cpf.substring(0, 9), 10);
+        int d2 = calcularDigitoVerificador(cpf.substring(0, 9) + d1, 11);
+
+        // Verifica se os dígitos verificadores estão corretos
+        if (!cpf.equals(cpf.substring(0, 9) + d1 + d2))
+            throw new InvalidInputException("Dígitos verificadores invalidos.");
+    }
+
+    private int calcularDigitoVerificador(String parte, int peso) throws InvalidInputException {
+        int soma = 0;
+
+        for (char c : parte.toCharArray()) {
+            // Verifica se todos os caracteres são dígitos
+            if (!Character.isDigit(c)) {
+                throw new InvalidInputException("Caractere inválido no CPF: " + c);
+            }
+
+            soma += Character.getNumericValue(c) * peso--;
+        }
+
+        int resto = soma % 11;
+        return resto < 2 ? 0 : 11 - resto;
+    }
+
     @FXML
     void saveButtonOnAction(ActionEvent event) {
         try {
             int estudanteId = Integer.parseInt(estudanteIdField.getText());
             String nome = nomeField.getText();
-            String cpf = cpfField.getText();
+            if(nome == null || nome.equals("")){
+                throw new InvalidInputException("Por favor forneça um nome.");
+            }
             Date dataNasc = Date.valueOf(dataNascField.getValue());
+
+            String cpf = cpfField.getText();
+            validarCpf(cpf);
 
             Estudante estudante = new Estudante(estudanteId, dataNasc, cpf, nome);
 
@@ -134,15 +205,9 @@ public class EstudanteController {
         } catch (SQLException e) {
             e.printStackTrace();
             showAlert("Erro no banco de dados", "Não foi possível salvar os dados do estudante.");
+        } catch (InvalidInputException e) {
+            showAlert("Entrada inválida", e.getMessage());
         }
-    }
-
-    // Método auxiliar para mostrar alertas informativos
-    private void showAlert(String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     // Método para atualizar a tabela de estudantes após inserir/atualizar
@@ -152,6 +217,11 @@ public class EstudanteController {
             observableEstudantes.setAll(estudantes);
         } catch (SQLException e) {
             e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Erro no banco de dados.");
+            alert.setContentText("Não foi possível recuperar os dados do banco.");
+            alert.showAndWait();
         }
     }
 
@@ -167,8 +237,6 @@ public class EstudanteController {
         try {
             estudantes = estudanteDBDAO.listaTodos();
 
-            System.out.println(estudantes);
-
             // Use ObservableList directly from Estudante
             observableEstudantes = FXCollections.observableArrayList(estudantes);
             tabelaEstudantes.setItems(observableEstudantes);
@@ -181,6 +249,8 @@ public class EstudanteController {
             alert.showAndWait();
         }
 
+
+        // Carregar selecionado para a tela
         tabelaEstudantes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 // Preencher campos de texto com dados do estudante selecionado
@@ -193,17 +263,7 @@ public class EstudanteController {
 
     }
 
-    @FXML
-    void handleGoToDepartamento(ActionEvent event) {
-        swapStage("departamento.fxml");
-    }
-
-    @FXML
-    void handleGoToDisciplina(ActionEvent event) {
-        swapStage("disciplina.fxml");
-    }
-
-    @FXML
+    @FXML @Override
     void handleGoToEstudante(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Onde você quer chegar?");
@@ -211,19 +271,4 @@ public class EstudanteController {
         alert.showAndWait();
     }
 
-    void swapStage(String viewFile) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/curso/appestudantes/view/" + viewFile));
-            Scene newScene = new Scene(loader.load(), 600, 437);
-            Stage stage = (Stage) saveButton.getScene().getWindow();
-            stage.setScene(newScene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Erro ao trocar cena");
-            alert.setContentText("Não foi possível trocar a cena.");
-            alert.showAndWait();
-        }
-    }
 }

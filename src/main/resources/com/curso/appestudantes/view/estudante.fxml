@@ -41,6 +41,7 @@
                               <TableColumn fx:id="colNome" prefWidth="150.0" text="Nome" />
                           </columns>
                       </TableView>
+                  <Button fx:id="editarDisciplinasButton" layoutX="65.0" layoutY="359.0" mnemonicParsing="false" onAction="#editarDisciplinasButtonOnAction" text="Editar Disciplinas" />
                   </children>
               </AnchorPane>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="398.0" prefWidth="358.0">
