@@ -30,10 +30,10 @@ public class DisciplinaController extends Controller {
     private TextField cargaHorariaField;
 
     @FXML
-    private TableColumn<?, ?> colId;
+    private TableColumn<Disciplina, Integer> colId;
 
     @FXML
-    private TableColumn<?, ?> colNome;
+    private TableColumn<Disciplina, String> colNome;
 
     @FXML
     private TextField disciplinaIdField;
@@ -98,16 +98,24 @@ public class DisciplinaController extends Controller {
     void saveButtonOnAction(ActionEvent event) {
         try {
             int disciplinaId = Integer.parseInt(disciplinaIdField.getText());
+
+            if(departamentoSelector.getValue() == null) {
+                throw new InvalidInputException("Selecione algum departamento");
+            }
+            int departamentoId = departamentoSelector.getValue().getDepartamentoId();
+
+            int cargaHoraria = Integer.parseInt(cargaHorariaField.getText());
+            if(cargaHoraria < 1) {
+                throw new InvalidInputException("Carga horária inválida");
+            }
+
             String nome = nomeField.getText();
             if(nome == null || nome.equals("")){
                 throw new InvalidInputException("Por favor forneça um nome.");
             }
-            int cargaHoraria = Integer.parseInt(cargaHorariaField.getText());
-            int departamentoId = departamentoSelector.getSelectionModel().getSelectedItem().getDepartamentoId();
 
+            // Valor a ser inserido e possível existente
             Disciplina disciplina = new Disciplina(disciplinaId, nome, departamentoId, cargaHoraria);
-
-            // Verifica se o estudante já existe no banco de dados
             Disciplina existente = disciplinaDBDAO.buscaPorId(disciplinaId);
 
             if (existente != null) {
@@ -207,11 +215,7 @@ public class DisciplinaController extends Controller {
 
     @FXML @Override
     void handleGoToDisciplina(ActionEvent event) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setHeaderText("Onde você quer chegar?");
-        alert.setContentText("Você já está aqui");
-
-        alert.showAndWait();
+        showAlert("Onde você quer chegar?", "Você já está aqui.");
     }
 
 }

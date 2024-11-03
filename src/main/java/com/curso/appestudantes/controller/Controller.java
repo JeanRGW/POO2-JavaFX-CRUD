@@ -4,15 +4,13 @@ import com.curso.appestudantes.App;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class Controller {
-    void swapStage(String viewFile) {
+    private void swapStage(String viewFile) {
         try {
             // Carrega cena do arquivo.
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/curso/appestudantes/view/" + viewFile));

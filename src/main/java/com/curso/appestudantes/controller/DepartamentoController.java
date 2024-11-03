@@ -59,7 +59,6 @@ public class DepartamentoController extends Controller {
     void excluirButtonOnAction(ActionEvent event) {
         try {
             int departamentoId = Integer.parseInt(departamentoIdField.getText());
-
             Departamento existente = departamentoDBDAO.buscaPorId(departamentoId);
 
             if (existente != null) {
@@ -67,6 +66,7 @@ public class DepartamentoController extends Controller {
                 confirmAlert.setTitle("Confirmar Remoção");
                 confirmAlert.setContentText("Deseja remover este departamento?");
 
+                // Aguardar confirmação
                 if (confirmAlert.showAndWait().get() == ButtonType.OK) {
                     // Atualiza o registro no banco de dados
                     departamentoDBDAO.removePorId(departamentoId);
@@ -91,15 +91,15 @@ public class DepartamentoController extends Controller {
     void saveButtonOnAction(ActionEvent event) {
         try {
             int departamentoId = Integer.parseInt(departamentoIdField.getText());
+            int quantProfessores = Integer.parseInt(qntProfessoresField.getText());
+
             String nome = nomeField.getText();
             if(nome == null || nome.equals("")){
                 throw new InvalidInputException("Por favor forneça um nome.");
             }
-            int quantProfessores = Integer.parseInt(qntProfessoresField.getText());
 
+            // Valor a ser inserido e possível existente
             Departamento departamento = new Departamento(departamentoId, nome, quantProfessores);
-
-            // Verifica se o estudante já existe no banco de dados
             Departamento existente = departamentoDBDAO.buscaPorId(departamentoId);
 
             if (existente != null) {
@@ -180,11 +180,7 @@ public class DepartamentoController extends Controller {
 
     @FXML @Override
     void handleGoToDepartamento(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("Onde você quer chegar?");
-        alert.setContentText("Você já está aqui");
-
-        alert.showAndWait();
+        showAlert("Onde você quer chegar?", "Você já está aqui.");
     }
 
 }

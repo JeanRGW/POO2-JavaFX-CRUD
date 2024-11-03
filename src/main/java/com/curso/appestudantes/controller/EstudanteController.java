@@ -265,10 +265,7 @@ public class EstudanteController extends Controller {
 
     @FXML @Override
     void handleGoToEstudante(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setHeaderText("Onde você quer chegar?");
-        alert.setContentText("Você já está aqui");
-        alert.showAndWait();
+        showAlert("Onde você quer chegar?", "Você já está aqui.");
     }
 
 }
