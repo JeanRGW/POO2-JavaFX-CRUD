@@ -1,0 +1,28 @@
+CREATE DATABASE appestudantes;
+
+CREATE TABLE estudante (
+    estudanteId SERIAL PRIMARY KEY,
+    nome VARCHAR(80) NOT NULL,
+    cpf VARCHAR(11),
+    dataNascimento DATE
+);
+
+CREATE TABLE departamento (
+    departamentoId SERIAL PRIMARY KEY,
+    nome VARCHAR(80) NOT NULL,
+    qntProfessores INT
+);
+
+CREATE TABLE disciplina (
+    disciplinaId SERIAL PRIMARY KEY,
+    nome VARCHAR(80) NOT NULL,
+    departamentoId INT REFERENCES departamento(departamentoId) ON DELETE CASCADE,
+    cargaHoraria INT
+);
+
+CREATE TABLE estudanteDisciplina (
+    estudanteId INT REFERENCES estudante(estudanteId) ON DELETE CASCADE,
+    disciplinaId INT REFERENCES disciplina(disciplinaId) ON DELETE CASCADE,
+    estado VARCHAR(30),
+    PRIMARY KEY (estudanteId, disciplinaId)
+);
