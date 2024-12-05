@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 public class DepartamentoController extends Controller {
     private DepartamentoDBDAO departamentoDBDAO;
@@ -126,6 +127,11 @@ public class DepartamentoController extends Controller {
             observableDepartamentos.setAll(departamentos);
         } catch (SQLException e) {
             e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Erro no banco de dados.");
+            alert.setContentText("Não foi possível recuperar os dados do banco.");
+            alert.showAndWait();
         }
     }
 
@@ -133,24 +139,11 @@ public class DepartamentoController extends Controller {
     public void initialize() {
         departamentoDBDAO = new DepartamentoDBDAO();
 
-        // Configurar as colunas
-        colId.setCellValueFactory(new PropertyValueFactory<>("departamentoId")); // Ensure the property name matches
-        colNome.setCellValueFactory(new PropertyValueFactory<>("nome")); // Ensure the property name matches
-
-        // Carregar dados do banco de dados
-        try {
-            departamentos = departamentoDBDAO.listaTodos();
-
-            observableDepartamentos = FXCollections.observableArrayList(departamentos);
-            tabelaDepartamentos.setItems(observableDepartamentos);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Erro no banco de dados.");
-            alert.setContentText("Não foi possível recuperar os dados do banco.");
-            alert.showAndWait();
-        }
+        /*  5° Refatoração
+         *   Autor: Matheus Gonzaga
+         *   Extract Method para inicialização da tabela
+         * */
+        initTables();
 
         tabelaDepartamentos.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldSelection, newSelection) -> {
@@ -169,4 +162,15 @@ public class DepartamentoController extends Controller {
         showAlert("Onde você quer chegar?", "Você já está aqui.");
     }
 
+    private void initTables(){
+        // Configurar as colunas
+        colId.setCellValueFactory(new PropertyValueFactory<>("departamentoId"));
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+
+        observableDepartamentos = FXCollections.observableArrayList(new ArrayList<>());
+        tabelaDepartamentos.setItems(observableDepartamentos);
+
+        atualizarTabelaDepartamentos();
+
+    }
 }

@@ -20,6 +20,7 @@ import javafx.scene.control.Alert.AlertType;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ArrayList;
 
 public class DisciplinaController extends Controller {
     private DisciplinaDBDAO disciplinaDBDAO;
@@ -73,7 +74,7 @@ public class DisciplinaController extends Controller {
                 showAlert("Erro", "Não existe uma disciplina cadastrada com esse ID.");
             }
 
-            atualizarTabelaDepartamentos();
+            atualizarTabelaDisciplinas();
 
         } catch (NumberFormatException e) {
             showAlert("Erro de entrada", "Algum campo está errado.");
@@ -125,7 +126,7 @@ public class DisciplinaController extends Controller {
             }
 
             // Atualizar a tabela após a inserção/atualização
-            atualizarTabelaDepartamentos();
+            atualizarTabelaDisciplinas();
 
         } catch (NumberFormatException e) {
             showAlert("Erro de entrada", "Algum campo está errado.");
@@ -137,12 +138,17 @@ public class DisciplinaController extends Controller {
         }
     }
 
-    private void atualizarTabelaDepartamentos() {
+    private void atualizarTabelaDisciplinas() {
         try {
             disciplinas = disciplinaDBDAO.listaTodas();
             observableDisciplinas.setAll(disciplinas);
         } catch (SQLException e) {
             e.printStackTrace();
+
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Erro no banco de dados.");
+            alert.setContentText("Não foi possível recuperar os dados do banco.");
+            alert.showAndWait();
         }
     }
 
@@ -150,24 +156,11 @@ public class DisciplinaController extends Controller {
     public void initialize() {
         disciplinaDBDAO = new DisciplinaDBDAO();
 
-        // Configurar as colunas
-        colId.setCellValueFactory(new PropertyValueFactory<>("disciplinaId"));
-        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-
-        // Carregar disciplinas do banco de dados
-        try {
-            disciplinas = disciplinaDBDAO.listaTodas();
-
-            observableDisciplinas = FXCollections.observableArrayList(disciplinas);
-            tabelaDisciplinas.setItems(observableDisciplinas);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Erro no banco de dados.");
-            alert.setContentText("Não foi possível recuperar os dados (disciplinas) do banco.");
-            alert.showAndWait();
-        }
+        /*  6° Refatoração
+         *   Autor: Guilherme K.T.
+         *   Extract Method para inicialização da tabela
+         * */
+        initTables();
 
         // Popular seleção de departamento.
         try {
@@ -204,5 +197,16 @@ public class DisciplinaController extends Controller {
     void handleGoToDisciplina(ActionEvent event) {
         showAlert("Onde você quer chegar?", "Você já está aqui.");
     }
+
+    private void initTables(){
+        // Configurar as colunas
+        colId.setCellValueFactory(new PropertyValueFactory<>("disciplinaId"));
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+
+        observableDisciplinas = FXCollections.observableArrayList(new ArrayList<>());
+        tabelaDisciplinas.setItems(observableDisciplinas);
+        atualizarTabelaDisciplinas();
+    }
+
 
 }
