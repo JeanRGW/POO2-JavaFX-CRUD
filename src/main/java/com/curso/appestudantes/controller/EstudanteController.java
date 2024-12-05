@@ -14,6 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import java.util.ArrayList;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,7 +24,6 @@ import java.util.List;
 
 public class EstudanteController extends Controller {
     private EstudanteDBDAO estudanteDBDAO;
-    private List<Estudante> estudantes;
     private ObservableList<Estudante> observableEstudantes;
 
     @FXML
@@ -41,26 +41,13 @@ public class EstudanteController extends Controller {
     @FXML
     private TextField estudanteIdField;
 
-    @FXML
-    private Button editarDisciplinasButton;
-
-    @FXML
-    private Button excluirButton;
-
-    @FXML
-    private MenuItem goToDepartamento;
-
-    @FXML
-    private MenuItem goToDisciplina;
-
-    @FXML
-    private MenuItem goToEstudante;
+    /*  3° Refatoração
+    *   Autor: JeanRGW
+    *   Remoção de referências desnecessárias para a interface.
+    * */
 
     @FXML
     private TextField nomeField;
-
-    @FXML
-    private Button saveButton;
 
     @FXML
     private TableView<Estudante> tabelaEstudantes;
@@ -93,7 +80,6 @@ public class EstudanteController extends Controller {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -105,11 +91,11 @@ public class EstudanteController extends Controller {
             Estudante existente = estudanteDBDAO.buscaPorId(estudanteId);
 
             if (existente != null) {
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirmar Remoção");
-                confirmAlert.setContentText("Deseja remover este estudante?");
-
-                if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+                /*  12° Refatoração
+                 *   Autor: JeanRGW
+                 *   Simplificação de confirmação com herança
+                 * */
+                if (getConfirmacao("Confirmar Remoção", "Deseja remover este estudante?")) {
                     // Atualiza o registro no banco de dados
                     estudanteDBDAO.removePorId(estudanteId);
                     showAlert("Remoção realizada", "O estudante foi excluido com sucesso.");
@@ -180,14 +166,11 @@ public class EstudanteController extends Controller {
             Estudante existente = estudanteDBDAO.buscaPorId(estudanteId);
 
             if (existente != null) {
-                // Mostra popup de confirmação para atualizar o registro
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirmar Atualização");
-                confirmAlert.setHeaderText("Estudante já cadastrado");
-                confirmAlert.setContentText("Deseja atualizar os dados deste estudante?");
-
-                // Captura a resposta do usuário
-                if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+                /*  12° Refatoração
+                 *   Autor: JeanRGW
+                 *   Simplificação de confirmação com herança
+                 * */
+                if (getConfirmacao("Confirmar Atualização", "Estudante já cadastrado, deseja atualizar os dados deste estudante?")) {
                     // Atualiza o registro no banco de dados
                     estudanteDBDAO.atualiza(estudante);
                     showAlert("Atualização realizada", "Os dados do estudante foram atualizados com sucesso.");
@@ -214,7 +197,11 @@ public class EstudanteController extends Controller {
     // Método para atualizar a tabela de estudantes após inserir/atualizar
     private void atualizarTabelaEstudantes() {
         try {
-            estudantes = estudanteDBDAO.listaTodos();
+            /* 8° Refatoração
+            *   Autor: JeanRGW
+            *   Atributo de classe convertido para variável local
+            */
+            List<Estudante> estudantes = estudanteDBDAO.listaTodos();
             observableEstudantes.setAll(estudantes);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -230,31 +217,15 @@ public class EstudanteController extends Controller {
     public void initialize() {
         estudanteDBDAO = new EstudanteDBDAO();
 
-        // Configurar as colunas
-        colId.setCellValueFactory(new PropertyValueFactory<>("estudanteId")); // Ensure the property name matches
-        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));       // Ensure the property name matches
+        /*  7° Refatoração
+        *   Autor: JeanRGW
+        *   Extract Method para inicialização da tabela
+        * */
+        initTables();
 
-        // Carregar dados do banco de dados
-        try {
-            estudantes = estudanteDBDAO.listaTodos();
-
-            // Use ObservableList directly from Estudante
-            observableEstudantes = FXCollections.observableArrayList(estudantes);
-            tabelaEstudantes.setItems(observableEstudantes);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("Erro no banco de dados.");
-            alert.setContentText("Não foi possível recuperar os dados do banco.");
-            alert.showAndWait();
-        }
-
-
-        // Carregar selecionado para a tela
+        // Adicionar interação para tabela
         tabelaEstudantes.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                // Preencher campos de texto com dados do estudante selecionado
                 estudanteIdField.setText(String.valueOf(newSelection.getEstudanteId()));
                 nomeField.setText(newSelection.getNome());
                 cpfField.setText(newSelection.getCpf());
@@ -267,6 +238,16 @@ public class EstudanteController extends Controller {
     @FXML @Override
     void handleGoToEstudante(ActionEvent event) {
         showAlert("Onde você quer chegar?", "Você já está aqui.");
+    }
+
+    private void initTables(){
+        // Configurar as colunas
+        colId.setCellValueFactory(new PropertyValueFactory<>("estudanteId"));
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+
+        observableEstudantes = FXCollections.observableArrayList(new ArrayList<>());
+        tabelaEstudantes.setItems(observableEstudantes);
+        atualizarTabelaEstudantes();
     }
 
 }

@@ -42,25 +42,15 @@ public class DisciplinaController extends Controller {
     private ChoiceBox<Departamento> departamentoSelector;
 
     @FXML
-    private Button excluirButton;
-
-    @FXML
-    private MenuItem goToDepartamento;
-
-    @FXML
-    private MenuItem goToDisciplina;
-
-    @FXML
-    private MenuItem goToEstudante;
-
-    @FXML
     private TextField nomeField;
 
     @FXML
-    private Button saveButton;
-
-    @FXML
     private TableView<Disciplina> tabelaDisciplinas;
+
+    /*  2° Refatoração
+     *   Autor: Matheus
+     *   Remoção de referências desnecessárias para a interface.
+     * */
 
     @FXML
     void excluirButtonOnAction(ActionEvent event) {
@@ -70,11 +60,11 @@ public class DisciplinaController extends Controller {
             Disciplina existente = disciplinaDBDAO.buscaPorId(disciplinaId);
 
             if (existente != null) {
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirmar Remoção");
-                confirmAlert.setContentText("Deseja remover esta disciplina?");
-
-                if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+                /*  10° Refatoração
+                 *   Autor: Guilherme
+                 *   Simplificação de confirmação com herança
+                 * */
+                if (getConfirmacao("Confirmar Remoção", "Deseja remover esta disciplina?")) {
                     // Atualiza o registro no banco de dados
                     disciplinaDBDAO.removePorId(disciplinaId);
                     showAlert("Remoção realizada", "A disciplina foi excluido com sucesso.");
@@ -119,14 +109,11 @@ public class DisciplinaController extends Controller {
             Disciplina existente = disciplinaDBDAO.buscaPorId(disciplinaId);
 
             if (existente != null) {
-                // Mostra popup de confirmação para atualizar o registro
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirmar Atualização");
-                confirmAlert.setHeaderText("Disciplina já cadastrado");
-                confirmAlert.setContentText("Deseja atualizar os dados desta disciplina?");
-
-                // Captura a resposta do usuário
-                if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+                /*  10° Refatoração
+                 *   Autor: Guilherme
+                 *   Simplificação de confirmação com herança
+                 * */
+                if (getConfirmacao("Confirmar Atualização", "Disciplina já cadastrada, deseja atualizar os dados desta disciplina?")) {
                     // Atualiza o registro no banco de dados
                     disciplinaDBDAO.atualiza(disciplina);
                     showAlert("Atualização realizada", "Os dados da disciplina foram atualizados com sucesso.");

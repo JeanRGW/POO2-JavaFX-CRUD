@@ -32,28 +32,18 @@ public class DepartamentoController extends Controller {
     private TextField departamentoIdField;
 
     @FXML
-    private Button excluirButton;
-
-    @FXML
-    private MenuItem goToDepartamento;
-
-    @FXML
-    private MenuItem goToDisciplina;
-
-    @FXML
-    private MenuItem goToEstudante;
-
-    @FXML
     private TextField nomeField;
 
     @FXML
     private TextField qntProfessoresField;
 
     @FXML
-    private Button saveButton;
-
-    @FXML
     private TableView<Departamento> tabelaDepartamentos;
+
+    /*  1° Refatoração
+     *   Autor: Matheus
+     *   Remoção de referências desnecessárias para a interface.
+     * */
 
     @FXML
     void excluirButtonOnAction(ActionEvent event) {
@@ -62,12 +52,11 @@ public class DepartamentoController extends Controller {
             Departamento existente = departamentoDBDAO.buscaPorId(departamentoId);
 
             if (existente != null) {
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirmar Remoção");
-                confirmAlert.setContentText("Deseja remover este departamento?");
-
-                // Aguardar confirmação
-                if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+                /*  9° Refatoração
+                 *   Autor: Matheus
+                 *   Simplificação de confirmação com herança
+                 * */
+                if (getConfirmacao("Confirmar Remoção", "Deseja remover este departamento?")) {
                     // Atualiza o registro no banco de dados
                     departamentoDBDAO.removePorId(departamentoId);
                     showAlert("Remoção realizada", "O departamento foi excluido com sucesso.");
@@ -103,14 +92,11 @@ public class DepartamentoController extends Controller {
             Departamento existente = departamentoDBDAO.buscaPorId(departamentoId);
 
             if (existente != null) {
-                // Mostra popup de confirmação para atualizar o registro
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirmar Atualização");
-                confirmAlert.setHeaderText("Departamento já cadastrado");
-                confirmAlert.setContentText("Deseja atualizar os dados deste departamento?");
-
-                // Captura a resposta do usuário
-                if (confirmAlert.showAndWait().get() == ButtonType.OK) {
+                /*  9° Refatoração
+                 *   Autor: Matheus
+                 *   Simplificação de confirmação com herança
+                 * */
+                if (getConfirmacao("Confirmar Atualização", "Departamento já cadastrado, deseja atualizar os dados deste departamento?")) {
                     // Atualiza o registro no banco de dados
                     departamentoDBDAO.atualiza(departamento);
                     showAlert("Atualização realizada", "Os dados do departamento foram atualizados com sucesso.");

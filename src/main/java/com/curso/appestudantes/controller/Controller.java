@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import java.io.IOException;
 
@@ -29,6 +30,13 @@ public class Controller {
 
             alert.showAndWait();
         }
+    }
+
+    boolean getConfirmacao(String titulo, String mensagem) {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle(titulo);
+        confirmAlert.setContentText(mensagem);
+        return confirmAlert.showAndWait().filter(response -> response == ButtonType.OK).isPresent();
     }
 
     @FXML
